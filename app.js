@@ -13,25 +13,9 @@ const port = process.env.MONGOPORT || 3000;
 require("dotenv").config();
 
 // Define los orígenes permitidos
-const allowedOrigins = [
-  'https://tienda-frontend-r3dgraves-projects.vercel.app/'
-];
+const whitelist = ["https://tienda-frontend-sigma.vercel.app"];
 
-// Configura CORS dinámico
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
+app.use(cors({ origin: whitelist }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -59,9 +43,4 @@ connectDb();
 // Iniciar servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en el puerto ${port}`);
-});
-
-app.use((req, res, next) => {
-  console.log('Origin:', req.headers.origin);
-  next();
 });
