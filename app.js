@@ -12,14 +12,23 @@ const app = express();
 const port = process.env.MONGOPORT || 3000;
 require("dotenv").config();
 
-const corsOptions = {
-  origin: 'https://tienda-frontend-2ru6vz26y-r3dgraves-projects.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+// Define los orígenes permitidos
+const allowedOrigins = [
+  "https://tienda-frontend-2ru6vz26y-r3dgraves-projects.vercel.app",
+  "http://localhost:4200", // Agrega localhost para pruebas locales
+];
+
+// Configura CORS dinámico
+const corsOptionsDelegate = (req, callback) => {
+  const origin = req.header("Origin");
+  if (allowedOrigins.includes(origin)) {
+    callback(null, { origin: true }); // Habilita CORS para este origen
+  } else {
+    callback(null, { origin: false }); // Bloquea el origen no permitido
+  }
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptionsDelegate));
 app.use(express.json());
 
 app.get("/", (req, res) => {
