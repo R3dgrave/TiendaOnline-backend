@@ -14,21 +14,25 @@ require("dotenv").config();
 
 // Define los orígenes permitidos
 const allowedOrigins = [
-  "https://tienda-frontend-2ru6vz26y-r3dgraves-projects.vercel.app",
-  "http://localhost:4200", // Agrega localhost para pruebas locales
+  'https://tienda-frontend-sigma.vercel.app',
+  'https://tienda-frontend-2ru6vz26y-r3dgraves-projects.vercel.app'
 ];
 
 // Configura CORS dinámico
-const corsOptionsDelegate = (req, callback) => {
-  const origin = req.header("Origin");
-  if (allowedOrigins.includes(origin)) {
-    callback(null, { origin: true }); // Habilita CORS para este origen
-  } else {
-    callback(null, { origin: false }); // Bloquea el origen no permitido
-  }
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 };
 
-app.use(cors(corsOptionsDelegate));
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get("/", (req, res) => {
