@@ -61,3 +61,8 @@ connectDb();
 app.listen(port, () => {
   console.log(`Servidor corriendo en el puerto ${port}`);
 });
+
+app.use((req, res, next) => {
+  console.log('Origin:', req.headers.origin);
+  next();
+});
