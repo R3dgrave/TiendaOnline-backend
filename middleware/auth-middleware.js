@@ -2,18 +2,28 @@ const jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
   const token = req.header("Authorization");
+
   if (!token) {
     return res.status(401).send({
-      error: "Acceso denegado",
+      error: "Acceso denegado, no se proporcionó token",
     });
   }
+  const bearerToken = token.split(" ")[1];
+
+  if (!bearerToken) {
+    return res.status(401).send({
+      error: "Acceso denegado, formato de token inválido",
+    });
+  }
+
   try {
-    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    // Verificar el token
+    const decode = jwt.verify(bearerToken, process.env.JWT_SECRET);
     req.user = decode;
     next();
   } catch (err) {
     return res.status(401).send({
-      error: "Acceso de token invalido",
+      error: "Acceso de token inválido",
     });
   }
 }
@@ -23,7 +33,7 @@ function isAdmin(req, res, next) {
     next();
   } else {
     return res.status(403).send({
-      error: "Forbidden",
+      error: "Acceso prohibido",
     });
   }
 }
