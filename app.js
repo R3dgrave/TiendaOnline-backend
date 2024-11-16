@@ -12,7 +12,14 @@ const app = express();
 const port = process.env.MONGOPORT || 3000;
 require("dotenv").config();
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://tienda-frontend-2ru6vz26y-r3dgraves-projects.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get("/", (req, res) => {
