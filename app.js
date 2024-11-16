@@ -14,8 +14,7 @@ require("dotenv").config();
 
 // Define los orígenes permitidos
 const allowedOrigins = [
-  'https://tienda-frontend-sigma.vercel.app',
-  'https://tienda-frontend-2ru6vz26y-r3dgraves-projects.vercel.app'
+  'https://tienda-frontend-r3dgraves-projects.vercel.app/'
 ];
 
 // Configura CORS dinámico
